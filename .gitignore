@@ -6,7 +6,7 @@ __pycache__/
 *.pyo
 .Python
 env/
-venv/
+myenv/
 ENV/
 env.bak/
 *.egg
@@ -17,7 +17,8 @@ env.bak/
 .idea/
 .vscode/
 *.swp
-
+script.py
+script2.py
 # Logs and output
 *.log
 *.out
