@@ -38,8 +38,8 @@ async def post_domain(domain: Dict[str, List[str]], id_token: str = Depends(get_
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
-        if "round1" in user:
-            return JSONResponse(status_code=204, content="Quiz Started")
+        # if "round1" in user:
+        #     return JSONResponse(status_code=204, content="Quiz Started")
 
         if not domain:
             raise HTTPException(status_code=400, detail="Domain list cannot be empty")
