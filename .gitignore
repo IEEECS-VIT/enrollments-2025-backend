@@ -7,6 +7,7 @@ __pycache__/
 .Python
 env/
 myenv/
+venv/
 ENV/
 env.bak/
 *.egg
@@ -72,3 +73,7 @@ cleanup_old_domain_keys.py
 *.csv
 auto_qualify.py
 export_qualified_users.py
+*.ods 
+deleted_users_backup.json
+backend_architecture_guide.md
+interview_slots_backup.json
