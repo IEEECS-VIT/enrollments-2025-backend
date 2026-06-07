@@ -273,7 +273,10 @@ async def fetch_domains(
                 ))
                 )
             else:
-                filter_conditions = Attr(previous_round_attr).eq("qualified") & Attr("round2").exists()
+                if domain == "APP":
+                    filter_conditions = Attr("round2").exists()
+                else:
+                    filter_conditions = Attr(previous_round_attr).eq("qualified") & Attr("round2").exists()
                 if status.lower() == "unmarked":
                     filter_conditions &= (~Attr(qualification_attr).exists() | Attr(qualification_attr).eq(None))
                 else:
@@ -449,7 +452,7 @@ async def mark_qualification(request: QualificationRequest, authorization: str =
                 content={"detail": "User not found"}
             )
 
-        if request.round > 1:
+        if request.round > 1 and request.domain != "APP":
             prev_status = user.get(f'qualification_status{request.round-1}')
             if not prev_status or prev_status.lower() != "qualified":
                 return JSONResponse(
@@ -901,6 +904,8 @@ async def get_qualified_users(
         
         # Scan domain table for qualified users
         qualification_field = f"qualification_status{interview_round}"
+        if domain == "APP" and interview_round == 1:
+            qualification_field = "qualification_status2"
         response = domain_table.scan(
             FilterExpression=Attr(qualification_field).eq("qualified")
         )

@@ -169,6 +169,8 @@ async def get_dashboard(
 
             for domain, subdomains in domain_data.items():
                 for sub in subdomains:
+                    if sub.upper() == "APP":
+                        continue
                     category = SUBDOMAIN_MAPPING.get(sub.upper(), "Other")
                     formatted_entry = f"{category}:{sub.upper()}"
 
@@ -178,18 +180,30 @@ async def get_dashboard(
                         pending_list.append(formatted_entry)
 
         if round == 2:
-            if "round1" not in user:
+            domain_data = user.get("domain", {})
+            flat_domains = [sub.upper() for sub_list in domain_data.values() for sub in sub_list] if isinstance(domain_data, dict) else []
+            has_app = "APP" in flat_domains
+
+            if "round1" not in user and not has_app:
                 return JSONResponse(status_code=201, content={"message": "Did not attempt round 1"})
             
             pending_list = []
             completed_list = []
-            if "status1" not in user:
+
+            status_data = user.get("status1", {})
+            if not isinstance(status_data, dict):
+                status_data = {}
+            else:
+                status_data = dict(status_data)
+
+            if has_app:
+                status_data["APP"] = "qualified"
+
+            if not status_data:
                 return JSONResponse(status_code=200, content={
                     "pending": pending_list,
                     "completed": completed_list
                 })
-
-            status_data = user.get("status1", {})  
 
             for sub, status in status_data.items():
                 category = SUBDOMAIN_MAPPING.get(sub.upper(), "Other")
