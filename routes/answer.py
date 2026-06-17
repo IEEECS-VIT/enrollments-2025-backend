@@ -96,7 +96,7 @@ async def post_answers(answerReq: AnswerStruct, idToken: str = Depends(get_acces
         if answerReq.round == 1:
             answers_data = [item.dict() for item in answerReq.answers]
         else:  # Round 2
-            answers_data = answerReq.answers  # Already a list of strings
+            answers_data = [item.dict() if hasattr(item, 'dict') else item for item in answerReq.answers]
 
         if answerReq.round == 1:
             if 'Item' in response:
