@@ -64,7 +64,7 @@ async def get_qs(domain: str, round: str, id_token: str = Depends(get_access_tok
         decoded_token = auth.verify_id_token(id_token, app=resources['firebase_app'])
         email = decoded_token.get('email')
         
-        if domain.upper() != "APP":
+        if round == "1" and domain.upper() != "APP":
             return JSONResponse(status_code=403, content=f"Attempting quizzes for domain '{domain}' is not allowed.")
 
         response = quiz_table.get_item(Key={'qid': domain})

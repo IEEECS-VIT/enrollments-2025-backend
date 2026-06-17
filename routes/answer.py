@@ -53,7 +53,7 @@ async def post_answers(answerReq: AnswerStruct, idToken: str = Depends(get_acces
         if not email:
             return JSONResponse(status_code=401, content="Invalid or missing email in token.")
 
-        if answerReq.domain.upper() != "APP":
+        if answerReq.round == 1 and answerReq.domain.upper() != "APP":
             return JSONResponse(status_code=403, content=f"Submissions for domain '{answerReq.domain}' are closed.")
 
         response = user_table.get_item(Key={"uid": email})
