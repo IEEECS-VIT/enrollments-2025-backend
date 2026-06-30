@@ -56,6 +56,9 @@ async def post_answers(answerReq: AnswerStruct, idToken: str = Depends(get_acces
         if answerReq.round == 1 and answerReq.domain.upper() != "APP":
             return JSONResponse(status_code=403, content=f"Submissions for domain '{answerReq.domain}' are closed.")
 
+        if answerReq.round == 2:
+            return JSONResponse(status_code=403, content="Submissions for Round 2 are closed.")
+
         response = user_table.get_item(Key={"uid": email})
         user = response.get("Item")
 
