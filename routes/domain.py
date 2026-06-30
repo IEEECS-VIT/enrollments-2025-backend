@@ -67,6 +67,9 @@ async def get_qs(domain: str, round: str, id_token: str = Depends(get_access_tok
         if round == "1" and domain.upper() != "APP":
             return JSONResponse(status_code=403, content=f"Attempting quizzes for domain '{domain}' is not allowed.")
 
+        if round == "2":
+            return JSONResponse(status_code=403, content="Attempting quizzes for Round 2 is not allowed because submissions are closed.")
+
         response = quiz_table.get_item(Key={'qid': domain})
         field = response.get('Item')
 
